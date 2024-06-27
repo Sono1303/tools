@@ -29,11 +29,6 @@ def reduce_image_size(input_path, output_path, target_size_mb=50, quality=90):
         
         resized_image = image.resize((new_width, new_height), Image.LANCZOS)
         
-        # if new_width < 1 or new_height < 1:
-        #     raise ValueError("Kích thước ảnh quá nhỏ sau khi giảm.")
-        
-        # resized_image = image.resize((new_width, new_height), Image.LANCZOS)
-        
         # Lưu ảnh với chất lượng giảm
         resized_image.save(output_path, quality=quality, optimize=True)
         
