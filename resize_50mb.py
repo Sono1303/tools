@@ -8,11 +8,16 @@ def reduce_image_size(input_path, output_path, target_size_mb=50, quality=90):
     try:
         # Mở ảnh
         image = Image.open(input_path)
-        
+        pic_name = os.path.basename(input_path)
+        image_format = image.format
+
         max_size_bytes = target_size_mb * 1024 * 1024
         image_size = os.path.getsize(input_path)
         if image_size <= max_size_bytes:
-            image.save(output_path, quality=100, optimize=True)
+            if image_format == 'JPEG':
+                image.save(os.path.join(output_path.replace(f'{pic_name}', ''), pic_name), quality=95)
+            else:
+                image.save(os.path.join(output_path.replace(f'{pic_name}', ''), pic_name))
             print(f"Ảnh đã được lưu với kích thước giảm tại: {output_path}, dung lượng: {os.path.getsize(output_path) / (1024 * 1024):.2f} MB")
             return
 
