@@ -2,7 +2,7 @@ from pathlib import Path
 from resize_50mb import reduce_image_size
 from PIL import Image
 
-INPUT_PATH = r'input'
+INPUT_PATH = r'/Users/khongtinduoc/Downloads/HOABINH'
 IMAGE_SIZE_TARGET = 50 # MB
 
 def is_image(file_path):
@@ -28,8 +28,7 @@ def create_directory(directory_path):
         print(f"Error creating directory '{directory_path}': {e}")
 
 def create_output_path(file_path):
-    path = str(file_path).replace('input','')
-    output_path = f'output{path}'
+    output_path = f'{file_path}_.jpg'
     return output_path
 
 def check_path_type(path):
