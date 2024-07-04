@@ -4,7 +4,7 @@ from PIL import Image
 # Tăng giới hạn kích thước ảnh
 Image.MAX_IMAGE_PIXELS = None
 
-def reduce_image_size(input_path, output_path, target_size_mb=50, quality=90):
+def reduce_image_size(input_path, output_path, target_size_mb=40, quality=90):
     try:
         # Mở ảnh
         image = Image.open(input_path)
