@@ -12,6 +12,8 @@ B4: Khởi động tool: python resize_tool.py
 B5: Ảnh được resize sẽ nằm trong thư mục tương ứng với path bắt đầu bằng "output/"(chạy code sẽ thấy)
 
 *Lưu ý:
++ Có thể sử dụng reduce_image_size hoặc reduce_width_length ở hàm read_files_in_directory
+
 + Tool sẽ quét tất cả các thư mục để tìm ảnh nên có thể để nhiều thư mục ảnh trong file input 
 
 + Có thể chỉnh sửa target_size_mb trong file resize_50mb.py để thay đổi kích thước mong muốn
