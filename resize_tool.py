@@ -1,9 +1,8 @@
 from pathlib import Path
 from resize_50mb import reduce_image_size
 from PIL import Image
-
-INPUT_PATH = r'/Users/khongtinduoc/Downloads/HOABINH'
-IMAGE_SIZE_TARGET = 50 # MB
+from resize_width_length import reduce_image_size as reduce_width_length
+INPUT_PATH = r'input'
 
 def is_image(file_path):
     try:
@@ -28,7 +27,8 @@ def create_directory(directory_path):
         print(f"Error creating directory '{directory_path}': {e}")
 
 def create_output_path(file_path):
-    output_path = f'{file_path}_.jpg'
+    path = str(file_path).replace('input','')
+    output_path = f'output{path}'
     return output_path
 
 def check_path_type(path):
@@ -52,7 +52,7 @@ def read_files_in_directory(directory_path):
             read_image(file_path)
             print(file_path)
             output_path = create_output_path(file_path)
-            reduce_image_size(file_path, output_path, IMAGE_SIZE_TARGET)
+            reduce_width_length(file_path, output_path)
             print("*******************")
         elif file_path.is_dir():
             output_path = create_output_path(file_path)
