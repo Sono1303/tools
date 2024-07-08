@@ -20,7 +20,7 @@ def reduce_image_size(input_path, output_path, scale_factor=3, quality=90):
         # Lưu ảnh với chất lượng giảm
         resized_image.save(output_path, quality=quality, optimize=True)
          
-         # Lấy kích thước của ảnh mới và dung lượng
+        # Lấy kích thước của ảnh mới và dung lượng
         new_size = os.path.getsize(output_path) / (1024 * 1024)
         
         # In ra kích thước ban đầu và mới của ảnh
