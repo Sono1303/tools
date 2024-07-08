@@ -3,6 +3,7 @@ import os
 import math
 from resize_width_length import reduce_image_size
 from rembg import remove
+# pip install rembg
 
 INFINITE = math.inf
 
