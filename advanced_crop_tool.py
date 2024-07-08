@@ -7,8 +7,8 @@ INFINITE = math.inf
 Image.MAX_IMAGE_PIXELS = None
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-INPUT_PATH = r"E:\tools\input\caophong\CAOPHONG-2022.jpg"
-OUTPUT_PATH = r"E:\tools\output"
+INPUT_PATH = r""
+OUTPUT_PATH = r""
 TARGET_COLOR = [(234, 166, 255), (255, 171, 255), (255, 170, 255), (254, 172, 252), (255, 169, 255), 
                 (242, 167, 255), (255, 167, 255), (254, 171, 254), (253, 172, 253), (254, 172, 254),
                 (249, 175, 250), (254, 172, 253), (233, 190, 233), (234, 203, 233)]
