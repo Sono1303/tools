@@ -1,7 +1,9 @@
 # tools
 Cách sử dụng code:
 
-B1: Tải 2 file trên về, đặt cùng một thư mục
+Resize tool:
+
+B1: Tải tất cả các file về, đặt cùng một thư mục
 
 B2: Chuyển tất cả ảnh vào một thư mục (nếu thư mục đặt chung với 2 file trên thì chỉ cần đặt tên thư mục là input)
 
@@ -19,3 +21,9 @@ B5: Ảnh được resize sẽ nằm trong thư mục tương ứng với path b
 + Có thể chỉnh sửa target_size_mb trong file resize_50mb.py để thay đổi kích thước mong muốn
         
 + Ảnh đầu ra không thể chính xác so với kích thước mong muốn, chỉ có thể ở mức gần nhất có thể so với kích thước mong muốn 
+
+Crop tool:
+
+B1: Tải tất cả các file về, đặt cùng một thư mục
+
+B2: Chuyển tất cả ảnh vào một thư mục
