@@ -1,38 +1,66 @@
-from PIL import Image, ImageFile
+from pathlib import Path
+from PIL import Image
+from advanced_crop_tool import advanced_crop_img
 import os
 
-Image.MAX_IMAGE_PIXELS = None
-ImageFile.LOAD_TRUNCATED_IMAGES = True
+INPUT_PATH = r'E:\tools\input\caophong'
+OUTPUT_PATH = r"E:\tools\output\caophong"
 
-INPUT_PATH = r"E:\tools\input\caophong\CAOPHONG-2021.jpg"
-OUTPUT_PATH = r'E:\tools\output'
-
-def crop_image(input_path, output_path, new_width, new_height):
+def is_image(file_path):
     try:
-        supported_formats = ['.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff']
-        _, ext = os.path.splitext(input_path)
-        if ext.lower() not in supported_formats:
-            raise ValueError(f"Unsupported file format: {ext}")
+        with Image.open(file_path) as img:
+            img.verify()
+        return True
+    except (IOError, SystemError) as e:
+        return False
 
-        img = Image.open(input_path)
-        img_name = os.path.basename(input_path)
-        width, height = img.size
-
-        # Tạo lập kích thước crop box
-        left = (width - new_width) / 2 
-        top = (height - new_height) / 2
-        right = (width + new_width) / 2
-        bottom = (height + new_height) / 2
-
-        # Lưu ảnh tại output_path
-        img_cropped = img.crop((left, top, right, bottom))
-        output = f"{OUTPUT_PATH}\{img_name}"
-        img_cropped.save(output)
-
+def read_image(image_path):
+    try:
+        with Image.open(image_path) as img:
+            print(f"Image format: {img.format}, size: {img.size}, mode: {img.mode}")
     except Exception as e:
-        print(f"Lỗi: {e}")
+        print(f"Error reading image {image_path}: {e}")
 
-new_width = 300
-new_height = 300
-crop_image(INPUT_PATH, OUTPUT_PATH, new_width, new_height)
+def create_directory(directory_path):
+    try:
+        Path(directory_path).mkdir(parents=True, exist_ok=True)
+        print(f"Directory '{directory_path}' created successfully.")
+    except OSError as e:
+        print(f"Error creating directory '{directory_path}': {e}")
 
+def create_output_path(file_path):
+    img_name = os.path.basename(file_path)
+    output_path = f"{OUTPUT_PATH}\{img_name}"
+    return output_path
+
+def check_path_type(path):
+    path_obj = Path(path)
+    if path_obj.is_file():
+        return 0
+    elif path_obj.is_dir():
+        return 1
+    else:
+        return -1
+
+def read_files_in_directory(directory_path):
+    directory = Path(directory_path)
+
+    if not directory.is_dir():
+        print(f"{directory_path} is not a valid directory.")
+        return
+    
+    for file_path in directory.iterdir():
+        if file_path.is_file() and is_image(file_path):
+            read_image(file_path)
+            print(file_path)
+            output_path = create_output_path(file_path)
+            advanced_crop_img(file_path, output_path)
+            print("*******************")
+        elif file_path.is_dir():
+            output_path = create_output_path(file_path)
+            create_directory(output_path)
+            read_files_in_directory(file_path)           
+
+path_type = check_path_type(INPUT_PATH)
+if path_type == 1:
+    read_files_in_directory(INPUT_PATH)

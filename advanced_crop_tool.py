@@ -1,8 +1,9 @@
 from PIL import Image, ImageFile
 import os
 import math
-from resize_width_length import reduce_image_size
+from resize_width_length import reduce_image_size as reduce_width_height
 from rembg import remove
+from resize_50mb import reduce_image_size
 # pip install rembg
 
 INFINITE = math.inf
@@ -10,17 +11,11 @@ INFINITE = math.inf
 Image.MAX_IMAGE_PIXELS = None
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-INPUT_PATH = r"E:\tools\input\lacthuy\LACTHUY-2020.jpg"
+INPUT_PATH = r"E:\tools\input\dabac\DABAC-2020.jpg"
 OUTPUT_PATH = r"E:\tools\output"
 
           
-TARGET_COLOR = [(0, 0, 0), (31, 31, 30), (29, 29, 28), (32, 32, 31), (33, 32, 29), (32, 32, 30), (32, 31, 29),
-                (36, 36, 36), (1, 1, 1), (2, 2, 2), (1, 2, 2), (3, 3, 3), (4, 4, 4), (2, 3, 3), (5, 5, 5),
-                (3, 4, 4), (6, 6, 6), (2, 4, 4), (5, 6, 5), (3, 5, 5), (4, 5, 5), (7, 7, 7), (0, 1, 1),
-                (8, 8, 8), (6, 7, 7), (4, 4, 5), (9, 9, 9), (6, 7, 6), (10, 10, 10), (7, 8, 8), (11, 11, 11),
-                (12, 12, 12), (13, 13, 13), (14, 14, 14), (15, 15, 15), (16, 16, 16), (17, 17, 17), (18, 18 , 18),
-                (19, 19, 19), (20, 20, 20), (21, 21, 21), (22, 22, 22), (23, 23, 23), (24, 24, 24), (25, 25, 25),
-                (5, 5, 4), (5, 6, 6)]      
+TARGET_COLOR = []      
 COLOR_PIXELS = []
 
 # Hàm tìm tọa độ các pixel của màu viền
@@ -33,8 +28,8 @@ def find_color_pixels(image_path, target_color):
     for y in range(height):
         for x in range(weight):
             pixel_color = pixels[x, y]
-            if (pixel_color[0] > 64) and (pixel_color[1] > 64) and (pixel_color[2] > 64):
-                # COLOR_PIXELS.append(pixel_color)
+            if (pixel_color[0] > 139) and (pixel_color[1] > 139) and (pixel_color[2] > 139) and (pixel_color not in TARGET_COLOR):
+                COLOR_PIXELS.append(pixel_color)
                 color_pixels.append((x, y))
 
     return color_pixels
@@ -46,16 +41,14 @@ def find_cropped_box(pixel_coordinates):
     right = -INFINITE
     top = INFINITE
 
-    max_left = None
-    max_right = None
-    max_top = None
-    max_bottom = None
+    # max_left = None
+    # max_right = None
+    # max_top = None
+    # max_bottom = None
 
-    i = -1
+    # i = -1
     for cor in pixel_coordinates:
-        i += 1 
-        # if COLOR_PIXELS[i][:3] in TARGET_COLOR:
-        #     continue
+        # i += 1 
 
         x, y = cor
         if x <= left:
@@ -83,8 +76,9 @@ def advanced_crop_img(input_path, output_path):
             raise ValueError(f"Unsupported file format: {ext}")
         
         # Lấy tên ảnh và tạo đường dẫn output
-        img_name = os.path.basename(input_path)
-        output = f"{output_path}\{img_name}"
+        # img_name = os.path.basename(input_path)
+        # output = f"{output_path}\{img_name}"
+        output = output_path
 
         # Resize ảnh
         img = Image.open(input_path)
@@ -92,7 +86,7 @@ def advanced_crop_img(input_path, output_path):
         if (width < 20000 and height < 20000):
             img.save(output)
         else:
-            reduce_image_size(input_path, output)
+            reduce_width_height(input_path, output)
         print("Done resizing")
 
         # Remove background
@@ -112,7 +106,11 @@ def advanced_crop_img(input_path, output_path):
         img_cropped.save(output, format="PNG")
         print("Done cropping")
 
+        # Kiểm tra kích thước ảnh và resize
+        reduce_image_size(output, output)
+        print("Done resize again")
+
     except Exception as e:
         print(f"Lỗi: {e}")
 
-advanced_crop_img(INPUT_PATH, OUTPUT_PATH)
+# advanced_crop_img(INPUT_PATH, OUTPUT_PATH)

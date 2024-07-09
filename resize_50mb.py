@@ -4,7 +4,7 @@ from PIL import Image
 # Tăng giới hạn kích thước ảnh
 Image.MAX_IMAGE_PIXELS = None
 
-def reduce_image_size(input_path, output_path, target_size_mb=40, quality=90):
+def reduce_image_size(input_path, output_path, target_size_mb=50, quality=90):
     try:
         # Mở ảnh
         image = Image.open(input_path)
@@ -15,9 +15,9 @@ def reduce_image_size(input_path, output_path, target_size_mb=40, quality=90):
         image_size = os.path.getsize(input_path)
         if image_size <= max_size_bytes:
             if image_format == 'JPEG':
-                image.save(os.path.join(output_path.replace(f'{pic_name}', ''), pic_name), quality=95)
+                image.save(os.path.join(output_path.replace(f'{pic_name}', ''), pic_name), quality=95, format="PNG")
             else:
-                image.save(os.path.join(output_path.replace(f'{pic_name}', ''), pic_name))
+                image.save(os.path.join(output_path.replace(f'{pic_name}', ''), pic_name), format="PNG")
             print(f"Ảnh đã được lưu với kích thước giảm tại: {output_path}, dung lượng: {os.path.getsize(output_path) / (1024 * 1024):.2f} MB")
             return
 
@@ -35,14 +35,14 @@ def reduce_image_size(input_path, output_path, target_size_mb=40, quality=90):
         # resized_image = image.resize((new_width, new_height), Image.LANCZOS)
         
         # Lưu ảnh với chất lượng giảm
-        resized_image.save(output_path, quality=quality, optimize=True)
+        resized_image.save(output_path, quality=quality, optimize=True, format="PNG")
         
         # Kiểm tra kích thước tệp và giảm chất lượng thêm nếu cần
         while os.path.getsize(output_path) > target_size_mb * 1024 * 1024:
             quality -= 5
             if quality < 10:
                 break
-            resized_image.save(output_path, quality=quality, optimize=True)
+            resized_image.save(output_path, quality=quality, optimize=True, format="PNG")
         
         print(f"Ảnh đã được lưu với kích thước giảm tại: {output_path}, dung lượng: {os.path.getsize(output_path) / (1024 * 1024):.2f} MB")
     except Exception as e:
