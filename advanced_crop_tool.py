@@ -10,28 +10,31 @@ INFINITE = math.inf
 Image.MAX_IMAGE_PIXELS = None
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-INPUT_PATH = r"E:\tools\input\caophong\CAOPHONG-2021.jpg"
+INPUT_PATH = r"E:\tools\input\lacthuy\LACTHUY-2020.jpg"
 OUTPUT_PATH = r"E:\tools\output"
 
-TARGET_COLOR = [(234, 166, 255), (255, 171, 255), (255, 170, 255), (254, 172, 252), (255, 169, 255), 
-                (242, 167, 255), (255, 167, 255), (254, 171, 254), (253, 172, 253), (254, 172, 254),
-                (249, 175, 250), (254, 172, 253), (233, 190, 233), (234, 203, 233), (249, 236, 251),
-                (252, 166, 251), (246, 177, 247), (54, 44, 55), (46, 39, 46), (52, 43, 53), (98, 98, 97),
-                (106, 107, 106), (95, 72, 101), (123, 92, 132), (230, 167, 252), (81, 61, 86), (107, 81, 115),
-                (116, 87, 122), (85, 65, 92), (151, 118, 118)]
+          
+TARGET_COLOR = [(0, 0, 0), (31, 31, 30), (29, 29, 28), (32, 32, 31), (33, 32, 29), (32, 32, 30), (32, 31, 29),
+                (36, 36, 36), (1, 1, 1), (2, 2, 2), (1, 2, 2), (3, 3, 3), (4, 4, 4), (2, 3, 3), (5, 5, 5),
+                (3, 4, 4), (6, 6, 6), (2, 4, 4), (5, 6, 5), (3, 5, 5), (4, 5, 5), (7, 7, 7), (0, 1, 1),
+                (8, 8, 8), (6, 7, 7), (4, 4, 5), (9, 9, 9), (6, 7, 6), (10, 10, 10), (7, 8, 8), (11, 11, 11),
+                (12, 12, 12), (13, 13, 13), (14, 14, 14), (15, 15, 15), (16, 16, 16), (17, 17, 17), (18, 18 , 18),
+                (19, 19, 19), (20, 20, 20), (21, 21, 21), (22, 22, 22), (23, 23, 23), (24, 24, 24), (25, 25, 25),
+                (5, 5, 4), (5, 6, 6)]      
+COLOR_PIXELS = []
 
 # Hàm tìm tọa độ các pixel của màu viền
 def find_color_pixels(image_path, target_color):
     img = Image.open(image_path).convert("RGBA")
     weight, height = img.size
-
     pixels = img.load()
-    color_pixels = []
+    # color_pixels = []
 
     for y in range(height):
         for x in range(weight):
             pixel_color = pixels[x, y]
-            if pixel_color[:3] in target_color:
+            if (pixel_color[0] > 64) and (pixel_color[1] > 64) and (pixel_color[2] > 64):
+                # COLOR_PIXELS.append(pixel_color)
                 color_pixels.append((x, y))
 
     return color_pixels
@@ -43,17 +46,31 @@ def find_cropped_box(pixel_coordinates):
     right = -INFINITE
     top = INFINITE
 
+    max_left = None
+    max_right = None
+    max_top = None
+    max_bottom = None
+
+    i = -1
     for cor in pixel_coordinates:
+        i += 1 
+        # if COLOR_PIXELS[i][:3] in TARGET_COLOR:
+        #     continue
+
         x, y = cor
         if x <= left:
             left = x
+            # max_left = COLOR_PIXELS[i]
         if  x >= right:
-            right = x
+            right = x 
+            # max_right = COLOR_PIXELS[i]
         if y <= top:
             top = y
+            # max_top = COLOR_PIXELS[i]
         if y >= bottom:
             bottom = y
-
+            # max_bottom = COLOR_PIXELS[i]
+    # print((max_left, max_top, max_right, max_bottom))
     return left, top, right, bottom
 
 # Hàm crop ảnh theo viền
@@ -91,7 +108,7 @@ def advanced_crop_img(input_path, output_path):
 
         # Crop ảnh và lưu ảnh
         image = Image.open(output)
-        img_cropped = image.crop((left - 20, top - 15, right + 20, bottom + 15))
+        img_cropped = image.crop((left, top, right, bottom))
         img_cropped.save(output, format="PNG")
         print("Done cropping")
 
