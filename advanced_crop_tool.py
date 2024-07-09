@@ -28,7 +28,7 @@ def find_color_pixels(image_path, target_color):
     img = Image.open(image_path).convert("RGBA")
     weight, height = img.size
     pixels = img.load()
-    # color_pixels = []
+    color_pixels = []
 
     for y in range(height):
         for x in range(weight):
